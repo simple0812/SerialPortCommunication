@@ -103,10 +103,18 @@ namespace WpfApp
 
         private void BtnSend_OnClick(object sender, RoutedEventArgs e)
         {
-            var newMsg = HexToByte(txtSend.Text);
-            comPort.Write(newMsg, 0, newMsg.Length);
+            try
+            {
+                var newMsg = HexToByte(txtSend.Text);
+                comPort.Write(newMsg, 0, newMsg.Length);
 
-            RenderMsg(spSend, txtSend.Text);
+                RenderMsg(spSend, txtSend.Text);
+            }
+            catch (Exception)
+            {
+                //
+            }
+           
         }
 
         private void BtnOpen_OnClick(object sender, RoutedEventArgs e)

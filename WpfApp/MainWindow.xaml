@@ -7,7 +7,11 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="696.698" Width="1027.988">
     <StackPanel Orientation="Vertical">
-        <Button Content="Open" x:Name="btnOpen" Click="BtnOpen_OnClick" Height="35"></Button>
+        <StackPanel Orientation="Horizontal">
+            <TextBox x:Name="txtCom" Height="35" Text="com4" Width="100" ></TextBox>
+            <Button Content="Open" x:Name="btnOpen" Click="BtnOpen_OnClick" Width="50" Height="35"></Button>
+        </StackPanel>
+        
         <TextBox x:Name="txtSend" Height="35"></TextBox>
         <Button Content="Send" x:Name="btnSend" Click="BtnSend_OnClick" Height="35"></Button>
         <Grid>

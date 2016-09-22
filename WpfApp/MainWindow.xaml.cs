@@ -126,14 +126,16 @@ namespace WpfApp
                 comPort.BaudRate = 9600; 
                 comPort.DataBits = 8;   
                 comPort.StopBits = StopBits.One;   
-                comPort.Parity = Parity.None; 
-                comPort.PortName = "COM4";
+                comPort.Parity = Parity.None;
+                comPort.PortName = txtCom.Text;
                 comPort.Open();
                 comPort.DataReceived += ComPort_DataReceived;
+                txtStatus.Text = "open";
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-               //
+                txtStatus.Text = ex.Message;
+                //
             }
         }
 
@@ -153,6 +155,8 @@ namespace WpfApp
                 comPort.Close();
                 comPort.DataReceived -= ComPort_DataReceived;
             }
+
+            txtStatus.Text = "close";
         }
 
         public void RenderMsg(ListView lv, string msg)
@@ -342,7 +346,7 @@ namespace WpfApp
             var rate = new byte[] { 0x00, 0x00 };
             if (isRunning[bytes[0]])
             {
-                rate = DirectiveHelper.ParseNumberTo2Bytes(runSpeed[bytes[0]]);// bytes.Skip(4).Take(2).ToArray();
+                rate = bytes[0] == 0x91 ? new byte[] { 0x00, 0x20 }  : DirectiveHelper.ParseNumberTo2Bytes(runSpeed[bytes[0]]);// bytes.Skip(4).Take(2).ToArray();
             }
 
             var content = new byte[] { bytes[0], 0x04, 0x00, 0x16, rate[0], rate[1], 0x00, 0x01, ids[0], ids[1], GetDeviceType(bytes) };
@@ -373,5 +377,10 @@ namespace WpfApp
 
 
         #endregion
+
+        private void BtnClose_OnClick(object sender, RoutedEventArgs e)
+        {
+            ClosePort();
+        }
     }
 }

@@ -10,6 +10,8 @@
         <StackPanel Orientation="Horizontal">
             <TextBox x:Name="txtCom" Height="35" Text="com4" Width="100" ></TextBox>
             <Button Content="Open" x:Name="btnOpen" Click="BtnOpen_OnClick" Width="50" Height="35"></Button>
+            <Button Content="Close" x:Name="btnClose" Click="BtnClose_OnClick" Width="50" Height="35"></Button>
+            <TextBlock x:Name="txtStatus"></TextBlock>
         </StackPanel>
         
         <TextBox x:Name="txtSend" Height="35"></TextBox>

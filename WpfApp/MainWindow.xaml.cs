@@ -61,17 +61,22 @@ namespace WpfApp
             isRunning.TryAdd(3, false);
             isRunning.TryAdd(4, false);
             isRunning.TryAdd(0x80, false);
+            isRunning.TryAdd(0x90, false);
+            isRunning.TryAdd(0x91, false);
 
             isPausing.TryAdd(1, false);
             isPausing.TryAdd(2, false);
             isPausing.TryAdd(3, false);
             isPausing.TryAdd(4, false);
             isPausing.TryAdd(0x80, false);
+            isPausing.TryAdd(0x90, false);
+            isPausing.TryAdd(0x91, false);
 
             runSpeed.Add(1, 0);
             runSpeed.Add(2, 0);
             runSpeed.Add(3, 0);
             runSpeed.Add(4, 0);
+            runSpeed.Add(0x90, 0);
 
             InitializeComponent();
             this.Closed += MainWindow_Closed;
@@ -349,7 +354,12 @@ namespace WpfApp
                 rate = bytes[0] == 0x91 ? new byte[] { 0x00, 0x20 }  : DirectiveHelper.ParseNumberTo2Bytes(runSpeed[bytes[0]]);// bytes.Skip(4).Take(2).ToArray();
             }
 
-            var content = new byte[] { bytes[0], 0x04, 0x00, 0x16, rate[0], rate[1], 0x00, 0x01, ids[0], ids[1], GetDeviceType(bytes) };
+            byte direction = 0x00;
+            if(bytes[0] == 3 || bytes[0] == 4)
+            {
+                direction = 0x01;
+            }
+            var content = new byte[] { bytes[0], 0x04, 0x00, 0x16, rate[0], rate[1], 0x00, direction, ids[0], ids[1], GetDeviceType(bytes) };
             var checkCode = DirectiveHelper.GenerateCheckCode(content);
             return content.Concat(checkCode).ToArray();
         }

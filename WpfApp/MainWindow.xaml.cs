@@ -28,11 +28,8 @@ namespace WpfApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        public SerialPort comPort = new SerialPort();
+        public readonly SerialPort comPort = new SerialPort();
         public Socket server = null;
-        private string address;
-        private int port = 8080;
-        private bool isStart = false;
         private byte[] data = new byte[256];
         private double MULTI_PERCENT = 0.1;
         private double BAD_PERCENT = 0.0;
@@ -47,14 +44,6 @@ namespace WpfApp
         {
             InitializeComponent();
 
-            try
-            {
-                address = Environment.GetEnvironmentVariable("IOT_DIRECTIVE_IP") ?? "192.168.1.100";
-            }
-            catch (Exception)
-            {
-                //
-            }
 
             isRunning.TryAdd(1, false);
             isRunning.TryAdd(2, false);
@@ -63,6 +52,7 @@ namespace WpfApp
             isRunning.TryAdd(0x80, false);
             isRunning.TryAdd(0x90, false);
             isRunning.TryAdd(0x91, false);
+            isRunning.TryAdd(0x92, false);
 
             isPausing.TryAdd(1, false);
             isPausing.TryAdd(2, false);
@@ -71,12 +61,15 @@ namespace WpfApp
             isPausing.TryAdd(0x80, false);
             isPausing.TryAdd(0x90, false);
             isPausing.TryAdd(0x91, false);
+            isPausing.TryAdd(0x92, false);
 
             runSpeed.Add(1, 0);
             runSpeed.Add(2, 0);
             runSpeed.Add(3, 0);
             runSpeed.Add(4, 0);
             runSpeed.Add(0x90, 0);
+            runSpeed.Add(0x91, 0);
+            runSpeed.Add(0x92, 0);
 
             InitializeComponent();
             this.Closed += MainWindow_Closed;
@@ -85,7 +78,6 @@ namespace WpfApp
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             comPort.Close();
-            isStart = false;
         }
 
         private byte[] HexToByte(string msg)
@@ -119,7 +111,7 @@ namespace WpfApp
             {
                 //
             }
-           
+
         }
 
         private void BtnOpen_OnClick(object sender, RoutedEventArgs e)
@@ -128,9 +120,9 @@ namespace WpfApp
             {
                 ClosePort();
 
-                comPort.BaudRate = 9600; 
-                comPort.DataBits = 8;   
-                comPort.StopBits = StopBits.One;   
+                comPort.BaudRate = 9600;
+                comPort.DataBits = 8;
+                comPort.StopBits = StopBits.One;
                 comPort.Parity = Parity.None;
                 comPort.PortName = txtCom.Text;
                 comPort.Open();
@@ -140,7 +132,6 @@ namespace WpfApp
             catch (Exception ex)
             {
                 txtStatus.Text = ex.Message;
-                //
             }
         }
 
@@ -166,7 +157,7 @@ namespace WpfApp
 
         public void RenderMsg(ListView lv, string msg)
         {
-            if(string.IsNullOrEmpty(msg)) return;
+            if (string.IsNullOrEmpty(msg)) return;
             Dispatcher.Invoke(() =>
             {
                 var tb = new TextBlock { Text = msg };
@@ -187,7 +178,7 @@ namespace WpfApp
             return p[0] == checkCode[0] && p[1] == checkCode[1];
         }
 
-        private void resolveSendData( List<byte> directiveData)
+        private void resolveSendData(List<byte> directiveData)
         {
             if (directiveData.Count <= 2) return;
 
@@ -351,11 +342,18 @@ namespace WpfApp
             var rate = new byte[] { 0x00, 0x00 };
             if (isRunning[bytes[0]])
             {
-                rate = bytes[0] == 0x91 ? new byte[] { 0x00, 0x20 }  : DirectiveHelper.ParseNumberTo2Bytes(runSpeed[bytes[0]]);// bytes.Skip(4).Take(2).ToArray();
+                if (bytes[0] == 0x91 || bytes[0] == 0x92)
+                {
+                    rate = new byte[] { 0x00, 0x20 };
+                }
+                else
+                {
+                    rate = DirectiveHelper.ParseNumberTo2Bytes(runSpeed[bytes[0]]);
+                }
             }
 
             byte direction = 0x00;
-            if(bytes[0] == 3 || bytes[0] == 4)
+            if (bytes[0] == 3 || bytes[0] == 4)
             {
                 direction = 0x01;
             }

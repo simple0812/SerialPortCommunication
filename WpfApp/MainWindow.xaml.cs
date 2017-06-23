@@ -103,6 +103,7 @@ namespace WpfApp
             try
             {
                 var newMsg = HexToByte(txtSend.Text);
+
                 comPort.Write(newMsg, 0, newMsg.Length);
 
                 RenderMsg(spSend, txtSend.Text);
@@ -247,15 +248,17 @@ namespace WpfApp
                             runTimers.Remove(bytes[0]);
                         }
 
-
                         isRunning[bytes[0]] = true;
 
-                        timer = new Timer(new TimerCallback((p) =>
+                        if (bytes[0] < 10)
                         {
-                            isRunning[bytes[0]] = false;
-                        }), null, interval, 0);
+                            timer = new Timer(new TimerCallback((p) =>
+                            {
+                                isRunning[bytes[0]] = false;
+                            }), null, interval, 0);
 
-                        runTimers.Add(bytes[0], timer);
+                            runTimers.Add(bytes[0], timer);
+                        }
                     }
                     break;
 

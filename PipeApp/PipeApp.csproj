@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{22D3AD09-3919-4198-9DF7-CE8F84F6B810}</ProjectGuid>
+    <ProjectGuid>{E4E60D3E-70FA-479E-8DF2-6699C3B54A0F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WpfApp</RootNamespace>
-    <AssemblyName>WpfApp</AssemblyName>
+    <RootNamespace>PipeApp</RootNamespace>
+    <AssemblyName>PipeApp</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -63,23 +63,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="libs\Common.cs" />
-    <Compile Include="libs\Directives\BaseDirective.cs" />
-    <Compile Include="libs\Directives\CloseDirective.cs" />
-    <Compile Include="libs\Directives\DirectiveResult.cs" />
-    <Compile Include="libs\Directives\IdleDirective.cs" />
-    <Compile Include="libs\Directives\PausingDirective.cs" />
-    <Compile Include="libs\Directives\RunningDirective.cs" />
-    <Compile Include="libs\Directives\TryPauseDirective.cs" />
-    <Compile Include="libs\Directives\TryStartDirective.cs" />
-    <Compile Include="libs\Enums\DirectiveType.cs" />
-    <Compile Include="libs\Enums\ProtocolVersion.cs" />
-    <Compile Include="libs\Helper\DirectiveHelper.cs" />
-    <Compile Include="libs\Implement\V485_1.cs" />
-    <Compile Include="libs\IProtocol.cs" />
-    <Compile Include="libs\IProtocolFacotry.cs" />
-    <Compile Include="libs\pipe.cs" />
-    <Compile Include="libs\ProtocolFactory.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

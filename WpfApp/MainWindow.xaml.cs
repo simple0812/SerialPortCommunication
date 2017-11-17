@@ -33,6 +33,7 @@ namespace WpfApp
         private byte[] data = new byte[256];
         private double MULTI_PERCENT = 0.1;
         private double BAD_PERCENT = 0.0;
+        private Random _random = new Random();
 
         private ConcurrentDictionary<int, bool> isRunning = new ConcurrentDictionary<int, bool>();
         private ConcurrentDictionary<int, bool> isPausing = new ConcurrentDictionary<int, bool>();
@@ -268,7 +269,7 @@ namespace WpfApp
                         isPausing[bytes[0]] = true;
                         Task.Run(async () =>
                         {
-                            await Task.Delay(1000);
+                            await Task.Delay(50);
                             isPausing[bytes[0]] = false;
                             isRunning[bytes[0]] = false;
                             if (runTimers.ContainsKey(bytes[0]))

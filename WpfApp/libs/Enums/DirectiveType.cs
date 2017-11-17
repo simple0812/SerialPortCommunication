@@ -47,6 +47,7 @@ namespace DirectiveServer.libs.Enums
             var enumType = dm.GetType();
 
             var name = Enum.GetName(enumType, dm);
+            if (string.IsNullOrEmpty(name)) return 0;
             var fi = enumType.GetField(name);
 
             if (null == fi) return 0;
